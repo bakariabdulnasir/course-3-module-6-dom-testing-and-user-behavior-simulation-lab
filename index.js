@@ -1,15 +1,61 @@
-// Step 1: Simulate User Behavior
-// - Add event listeners for button clicks and form submissions.
-// - Use JavaScript to dynamically update the DOM based on user actions.
+// index.js
 
-// Step 2: DOM Manipulation Functions
-// - Implement functions to add, update, and remove DOM elements.
-// - Ensure all elements are dynamically created with appropriate attributes and content.
+// Add an element to the DOM
+function addElementToDOM(id, content) {
+  let element = document.getElementById(id);
 
-// Step 3: Error Handling
-// - Display error messages in the DOM for invalid inputs or missing elements.
-// - Create reusable functions to handle common error cases.
+  if (!element) {
+    element = document.createElement("div");
+    element.id = id;
+    document.body.appendChild(element);
+  }
 
-// Step 4: Reusable Utilities
-// - Create modular utility functions, such as createElement(tag, attributes).
-// - Ensure all functions follow DRY principles for maintainability.
+  element.textContent = content;
+}
+
+// Remove an element from the DOM
+function removeElementFromDOM(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.remove();
+  }
+}
+
+// Simulate a button click and update the DOM
+function simulateClick(id, content) {
+  addElementToDOM(id, content);
+}
+
+// Handle form submission and update the DOM
+function handleFormSubmit(formId, targetId) {
+  const form = document.getElementById(formId);
+  const input = form.querySelector("input");
+  const errorMessage = document.getElementById("error-message");
+
+  if (!input.value.trim()) {
+    errorMessage.textContent = "Input cannot be empty";
+    errorMessage.classList.remove("hidden");
+    return;
+  }
+
+  errorMessage.classList.add("hidden");
+  addElementToDOM(targetId, input.value);
+  input.value = "";
+}
+
+/* 
+  IMPORTANT:
+  Expose functions globally so Jest can access them
+*/
+window.addElementToDOM = addElementToDOM;
+window.removeElementFromDOM = removeElementFromDOM;
+window.simulateClick = simulateClick;
+window.handleFormSubmit = handleFormSubmit;
+
+// Export functions for Jest (Node.js/CommonJS style)
+module.exports = {
+  addElementToDOM,
+  removeElementFromDOM,
+  simulateClick,
+  handleFormSubmit,
+};
